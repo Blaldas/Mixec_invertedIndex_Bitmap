@@ -53,7 +53,8 @@ The tomal memory consumed is *D*×*n*×32 bits.
 
 An interesting conclusion is obtained when trying to create a relation between both memory complexity formulas, let us see:
 
-*D*×*n*×32 = *D*×*C**×*n*
+*D*×*n*×32 = *D*×*C*×*n*
+
 32 = *C*
 
 What does it mean?
