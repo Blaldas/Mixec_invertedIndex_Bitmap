@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class MixedArray {
     /*
       This class is used to store either inverted index arrays or bitmap arrays.
@@ -58,4 +60,31 @@ public class MixedArray {
         return numberTids;
     }
 
+    public int getNumberUsedTids() {
+        if (surpassCeiling)
+            return numberTids;
+        int num = 0;
+        for (boolean n : bitmap)
+            if (n)
+                ++num;
+        return num;
+    }
+
+    public void show() {
+        if(surpassCeiling)
+            System.out.println(Arrays.toString(invertedIndex));
+        else
+        {
+            int num = 0;
+            for(boolean n : bitmap)
+                if(n)
+                    ++num;
+            int invert[] = new int[num];
+            int t = 0;
+            for(int i = 0; i < numberTids; ++i)
+                if(bitmap[i])
+                    invert[t++] = i;
+            System.out.println(Arrays.toString(invert));
+        }
+    }
 }

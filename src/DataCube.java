@@ -66,7 +66,7 @@ public class DataCube {
         MixedArray mat = pointQuerySeach(query);
         if (mat == null)
             return -1;
-        return mat.getNumberTids();
+        return mat.getNumberUsedTids();
 
     }
 
@@ -144,14 +144,13 @@ public class DataCube {
             else
                 result = new MixedArray(false, arrayA.getNumberTids());
 
-            if (arrayA.surpassCeiling){
-                for(int i = 0; i < arrayA.numberTids; i++)
-                    if(arrayB.bitmap[arrayA.invertedIndex[i]])
+            if (arrayA.surpassCeiling) {
+                for (int i = 0; i < arrayA.numberTids; i++)
+                    if (arrayB.bitmap[arrayA.invertedIndex[i]])
                         result.addTid(i);
-            }else
-            {
-                for(int i = 0; i < arrayB.numberTids; i++)
-                    if(arrayA.bitmap[arrayB.invertedIndex[i]])
+            } else {
+                for (int i = 0; i < arrayB.numberTids; i++)
+                    if (arrayA.bitmap[arrayB.invertedIndex[i]])
                         result.addTid(i);
             }
 

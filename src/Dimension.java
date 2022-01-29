@@ -6,14 +6,13 @@ public class Dimension {
     int upper;
 
     /**
-     *
      * @param lower lowest attribute value to be represented
      * @param upper highest attribute value to be represented
-     *
+     *              <p>
      *              This method only stores the value and constructs the MixedArray hashmap.
      *              The method defineCardinalities() must be used before adding any data to the hashmap
      */
-    public Dimension(int lower, int upper){
+    public Dimension(int lower, int upper) {
         this.lower = lower;
         this.upper = upper;
         this.arrays = new MixedArray[upper - lower + 1];
@@ -21,37 +20,49 @@ public class Dimension {
 
 
     /**
-     *
      * @param arraySizes array with the cardinalities for each attribute value.
      */
-    public void defineArraySizesForHashMap(int arraySizes[], int numberTuples){
-        if(arrays.length != arraySizes.length) {
+    public void defineArraySizesForHashMap(int[] arraySizes, int numberTuples) {
+        if (arrays.length != arraySizes.length) {
             Exception e = new Exception();
             e.printStackTrace();
             System.exit(1);
         }
+
         for (int i = 0; i < arrays.length; ++i)
-            if(arraySizes[i] != 0)
-                if(arraySizes[i] > DataCube.ceiling)
+            //only creates arrays that store something
+            if (arraySizes[i] > 0)
+                if (arraySizes[i] > DataCube.ceiling)
                     arrays[i] = new MixedArray(true, arraySizes[i]);
                 else
                     arrays[i] = new MixedArray(false, numberTuples);
 
     }
 
-    public void addTid(int tid, int value){
-        arrays[value-lower].addTid(tid);
+    public void addTid(int tid, int value) {
+        arrays[value - lower].addTid(tid);
     }
 
 
-    /**todo
+    /**
+     * 
      *
      * @return
      */
     public int getNumberTuples() {
-        int number = 0;
-// TODO: 12/01/2022  
-        return number;
+        for (MixedArray m : arrays)
+            if (m != null)
+                if (!m.surpassCeiling)
+                    return m.getNumberTids();
+        //if no dimensions use bitmap
+        int bigger = 0;
+        for (MixedArray m : arrays)
+
+            if (m != null)
+                if(m.invertedIndex[m.numberTids-1] > bigger)
+                    bigger = m.invertedIndex[m.numberTids-1];
+
+        return bigger+1;
     }
 
     /**
