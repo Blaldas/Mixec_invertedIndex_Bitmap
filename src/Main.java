@@ -27,7 +27,7 @@ public class Main {
         ceiling = Integer.parseInt(args[1]);
 
         Scanner sc = new Scanner(System.in);
-        String path = "forest";//args[0];
+        String path = "D:\\Desktop\\isec\\3 ano\\2 semestre\\Estágio\\Código\\Internship Data Cube ID Reduction\\Project 4\\CovidData";//args[0];
         load(path);
         System.gc();
 

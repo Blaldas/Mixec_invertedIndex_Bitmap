@@ -43,28 +43,6 @@ public class Dimension {
         arrays[value - lower].addTid(tid);
     }
 
-
-    /**
-     * 
-     *
-     * @return
-     */
-    public int getNumberTuples() {
-        for (MixedArray m : arrays)
-            if (m != null)
-                if (!m.surpassCeiling)
-                    return m.getNumberTids();
-        //if no dimensions use bitmap
-        int bigger = 0;
-        for (MixedArray m : arrays)
-
-            if (m != null)
-                if(m.invertedIndex[m.numberTids-1] > bigger)
-                    bigger = m.invertedIndex[m.numberTids-1];
-
-        return bigger+1;
-    }
-
     /**
      * @param value value of the dimension
      * @return ID list of the tuples with that value, if the value is not found returns an array with size 0. Care that the array of a found value may be zero as well, so it's not a flag

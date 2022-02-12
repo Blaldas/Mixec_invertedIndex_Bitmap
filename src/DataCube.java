@@ -47,15 +47,11 @@ public class DataCube {
     }
 
     public int getNumberTuples() {
-        return dimension[0].getNumberTuples();
+        return numberTuples;
     }
 
     public void setNumberTuples(int numberTuples) {
         this.numberTuples = numberTuples;
-    }
-
-    public int numberTuples() {
-        return numberTuples;
     }
 
     /**
@@ -119,7 +115,6 @@ public class DataCube {
             return result;
         } else {
             result = new MixedArray(false, numberTuples);
-            //result.addValues(0, shellFragmentList[0].getBiggestTid());
             for (int i = 0; i < numberTuples; i++)
                 result.addTid(i);
         }
@@ -128,31 +123,31 @@ public class DataCube {
     }
 
     private MixedArray intersect(MixedArray arrayA, MixedArray arrayB) {
-        if (!arrayA.surpassCeiling && !arrayB.surpassCeiling) {
-            MixedArray result = new MixedArray(false, arrayA.getNumberTids());
-            for (int i = 0; i < result.getNumberTids(); ++i)
-                if (arrayA.bitmap[i] && arrayB.bitmap[i])
-                    result.addTid(i);
-            return result;
+        if (!arrayA.surpassCeiling && !arrayB.surpassCeiling) {                             //if both bitmap
+            MixedArray result = new MixedArray(false, arrayA.numberTids);        //creates bitmap
+            for (int i = 0; i < result.numberTids; ++i)                                     //for each bit
+                if (arrayA.bitmap[i] && arrayB.bitmap[i])                                   //if is true in both
+                    result.bitmap[i] = true;                                                  //adds to the resulting array
+            return result;                                                                  //returns array
 
-        } else if (arrayA.surpassCeiling && arrayB.surpassCeiling) {
-            return new MixedArray(intersectArrays(arrayA.invertedIndex, arrayB.invertedIndex));
+        } else if (arrayA.surpassCeiling && arrayB.surpassCeiling) {                        //if both are inverted index
+            return new MixedArray(intersectArrays(arrayA.invertedIndex, arrayB.invertedIndex));//does inverted index intersection method
         } else {
-            MixedArray result;
-            if (arrayA.surpassCeiling)
-                result = new MixedArray(false, arrayB.getNumberTids());
-            else
-                result = new MixedArray(false, arrayA.getNumberTids());
+            //creates resulting bitmap
+            int[] resultingArray = new int[arrayA.getNumberUsedTids() > arrayB.getNumberUsedTids() ? arrayB.getNumberUsedTids() : arrayA.getNumberUsedTids()];
+            int a = 0;
 
             if (arrayA.surpassCeiling) {
                 for (int i = 0; i < arrayA.numberTids; i++)
                     if (arrayB.bitmap[arrayA.invertedIndex[i]])
-                        result.addTid(i);
-            } else {
+                        resultingArray[a++] = arrayA.invertedIndex[i];
+            } else
                 for (int i = 0; i < arrayB.numberTids; i++)
                     if (arrayA.bitmap[arrayB.invertedIndex[i]])
-                        result.addTid(i);
-            }
+                        resultingArray[a++] = arrayB.invertedIndex[i];
+
+            MixedArray result = new MixedArray(true, a);
+            for (int i = 0; i < a; result.invertedIndex[i] = resultingArray[i++]) ;
 
             return result;
         }
@@ -171,12 +166,7 @@ public class DataCube {
         while (ai < arrayA.length && bi < arrayB.length) {
             if (arrayA[ai] == arrayB[bi]) {
                 if (ci == 0 || arrayA[ai] != c[ci - 1]) {
-                    //if (arrayA[ai] != 0) {  Esta verificação foi removida porque os arrays enviados para aqui têm o tamanho estritamente necessário
-                    //porém, esta linha estava a ignorar o tid 0 e a gastar tempo precioso
-                    //Caso possa receber arrays com tamanho maior que o necessário, a linha pode ser usada como:
-                    //if (arrayA[ai] != 0 && ai != 0)
                     c[ci++] = arrayA[ai];
-                    //}
                 }
                 ai++;
                 bi++;
