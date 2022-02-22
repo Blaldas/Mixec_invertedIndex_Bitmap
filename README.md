@@ -1,4 +1,4 @@
-# Mixec_invertedIndex_Bitmap
+# Mixed_invertedIndex_Bitmap
 
 This repository contains code to a data cube structure the mixes both inverted index and bitmap arrays.
 
